@@ -7,8 +7,7 @@ async function main() {
   await db.delete(products).execute();
 
   // Insert new products
-  await db.insert(products).values(sampleData.products); // Remove `{ data: ... }`
-
+  await db.insert(products).values(sampleData.products);
   console.log("Database seeded successfully!");
 }
 
