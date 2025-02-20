@@ -6,14 +6,13 @@ import Link from "next/link";
 import Filters from "@/components/Filters";
 
 export default async function Home(props: {
-  searchParams?: Promise<{ query: string; sortBy: string }>;
+  searchParams?: Promise<{ query: string; sortBy: string; color: string }>;
 }) {
   const searchParams = await props.searchParams;
   const query = searchParams?.query || "";
-  const sortBy = searchParams?.sortBy || "";
-  const products = await getAllProducts(query, sortBy);
-
-  console.log(sortBy);
+  const sortByQ = searchParams?.sortBy || "";
+  const colorQ = searchParams?.color || "";
+  const products = await getAllProducts(query, sortByQ, colorQ);
 
   return (
     <div className="mx-auto p-8 max-w-7xl">

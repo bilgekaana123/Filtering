@@ -61,17 +61,15 @@ export default function Filters() {
   const searchParams = useSearchParams();
   const { replace } = useRouter();
 
-  function handleColorChange(color: string, isChecked: boolean) {
+  function handleColorChange(term: string, isChecked: boolean) {
     const params = new URLSearchParams(searchParams);
     const currentColors = params.get("color")?.split(",") || [];
 
-    console.log(currentColors);
-
     let newColors: string[];
     if (isChecked) {
-      newColors = [...new Set([...currentColors, color])];
+      newColors = [...new Set([...currentColors, term])];
     } else {
-      newColors = currentColors.filter((c) => c !== color);
+      newColors = currentColors.filter((c) => c !== term);
     }
 
     // Update or remove the color parameter
