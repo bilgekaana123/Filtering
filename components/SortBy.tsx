@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import { ChevronDown } from "lucide-react";
+import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import { useState } from "react";
 
 const SortOptions = [
@@ -24,11 +25,25 @@ const SortOptions = [
   },
 ] as const;
 
-export default function Filtering() {
-  const [filter, setFilter] = useState({ sort: "none" });
+export default function SortBy() {
+  // const [filter, setFilter] = useState({ sort: "none" });
 
-  console.log(filter);
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const { replace } = useRouter();
+  const params = new URLSearchParams(searchParams);
 
+  const filter = searchParams.get("sortBy")?.toString();
+
+  function handleSortChange(sortValue: string) {
+    /*  setFilter({ sort: sortValue }); */
+    if (sortValue === "none") {
+      params.delete("sortBy");
+    } else {
+      params.set("sortBy", sortValue);
+    }
+    replace(`${pathname}?${params.toString()}`);
+  }
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="flex items-center">
@@ -41,15 +56,13 @@ export default function Filtering() {
             className={cn(
               "flex items-center justify-start w-full  p-2 lg:p-4 text-sm",
               {
-                "text-black": options.value === filter.sort,
-                "text-gray-400": options.value !== filter.sort,
+                "text-black": options.value === filter,
+                "text-gray-400": options.value !== filter,
               },
             )}
             variant="ghost"
             key={options.name}
-            onClick={() =>
-              setFilter((prev) => ({ ...prev, sort: options.value }))
-            }
+            onClick={() => handleSortChange(options.value)}
           >
             {options.name}
           </Button>
