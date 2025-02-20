@@ -6,12 +6,19 @@ import Link from "next/link";
 import Filters from "@/components/Filters";
 
 export default async function Home(props: {
-  searchParams?: Promise<{ query: string; sortBy: string; color: string }>;
+  searchParams?: Promise<{
+    query: string;
+    sortBy: string;
+    color: string;
+    size: string;
+  }>;
 }) {
   const searchParams = await props.searchParams;
   const query = searchParams?.query || "";
   const sortByQ = searchParams?.sortBy || "";
   const colorQ = searchParams?.color || "";
+  const sizeQ = searchParams?.size || "";
+
   const products = await getAllProducts(query, sortByQ, colorQ);
 
   return (
@@ -38,7 +45,6 @@ export default async function Home(props: {
           </div>
         )}
       </div>
-      );
     </div>
   );
 }

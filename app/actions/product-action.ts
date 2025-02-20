@@ -2,35 +2,46 @@
 
 import { db } from "@/db/drizzle";
 import { products } from "@/db/schema";
-import { ilike, asc, desc, inArray } from "drizzle-orm";
+import { ilike, asc, desc, inArray, and, SQL } from "drizzle-orm";
 
 export async function getAllProducts(
   query?: string,
   sortBy?: string,
   color?: string,
+  size?: string,
 ) {
-  // Base query
-  const queryBuild = db.select().from(products);
+  const conditions: SQL[] = [];
 
-  // Apply Name Filtering
+  // Add name search condition
   if (query) {
-    queryBuild.where(ilike(products.name, `%${query}%`));
+    conditions.push(ilike(products.name, `%${query}%`));
   }
 
-  // Apply Price-Sorting
-  if (sortBy === "price-asc") {
-    queryBuild.orderBy(asc(products.price));
-  } else if (sortBy === "price-desc") {
-    queryBuild.orderBy(desc(products.price));
-  }
-
-  // Apply Color Filtering
+  // Add color filter condition
   if (color) {
-    const colorsArray = color.split(",");
-    queryBuild.where(inArray(products.color, colorsArray));
+    const colorArray = color.split(",");
+    conditions.push(inArray(products.color, colorArray));
   }
 
-  const data = await queryBuild;
+  // Add size filter condition
+  if (size) {
+    const sizeArray = size.split(",");
+    conditions.push(inArray(products.size, sizeArray));
+  }
 
+  const baseQuery = db.select().from(products);
+
+  const queryWithConditions =
+    conditions.length > 0 ? baseQuery.where(and(...conditions)) : baseQuery;
+
+  // Apply sorting
+  const finalQuery =
+    sortBy === "price-asc"
+      ? queryWithConditions.orderBy(asc(products.price))
+      : sortBy === "price-desc"
+        ? queryWithConditions.orderBy(desc(products.price))
+        : queryWithConditions;
+
+  const data = await finalQuery;
   return data;
 }
