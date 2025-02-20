@@ -4,11 +4,11 @@ import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
+  DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import { ChevronDown } from "lucide-react";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
-import { useState } from "react";
 
 const SortOptions = [
   {
@@ -26,8 +26,6 @@ const SortOptions = [
 ] as const;
 
 export default function SortBy() {
-  // const [filter, setFilter] = useState({ sort: "none" });
-
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { replace } = useRouter();
@@ -50,23 +48,25 @@ export default function SortBy() {
         Sort By
         <ChevronDown />
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="flex flex-col items-center">
-        {SortOptions.map((options) => (
-          <Button
-            className={cn(
-              "flex items-center justify-start w-full  p-2 lg:p-4 text-sm",
-              {
-                "text-black": options.value === filter,
-                "text-gray-400": options.value !== filter,
-              },
-            )}
-            variant="ghost"
-            key={options.name}
-            onClick={() => handleSortChange(options.value)}
-          >
-            {options.name}
-          </Button>
-        ))}
+      <DropdownMenuContent>
+        <DropdownMenuItem className="flex flex-col items-center">
+          {SortOptions.map((options) => (
+            <Button
+              className={cn(
+                "flex items-center justify-start w-full  p-2 lg:p-4 text-sm",
+                {
+                  "text-black": options.value === filter,
+                  "text-gray-400": options.value !== filter,
+                },
+              )}
+              variant="ghost"
+              key={options.name}
+              onClick={() => handleSortChange(options.value)}
+            >
+              {options.name}
+            </Button>
+          ))}
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
