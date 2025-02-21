@@ -44,8 +44,18 @@ export default function SortBy() {
   }
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="hidden lg:flex items-center">
-        Sort
+      <DropdownMenuTrigger className="hidden lg:flex">
+        {
+          <div className="ml-2">
+            {filter === "price-desc" ? (
+              <label>Price: High to Low</label>
+            ) : filter === "price-asc" ? (
+              <label>Price: Low to High</label>
+            ) : (
+              <label>Sort By</label>
+            )}
+          </div>
+        }{" "}
         <ChevronDown />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
