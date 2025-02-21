@@ -9,12 +9,16 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { Button } from "./ui/button";
+import { Filter } from "lucide-react";
 
 export default function MobileFilters() {
   return (
     <div className="flex lg:hidden">
       <Drawer>
-        <DrawerTrigger>Open</DrawerTrigger>
+        <DrawerTrigger className="flex items-center rounded-2xl border border-gray-500 py-1 px-3 hover:ring-1 ring-gray-400">
+          <div>Filter</div>
+          <Filter className="w-4 h-4 ml-2" />
+        </DrawerTrigger>
         <DrawerContent className="w-full h-full">
           <DrawerHeader>
             <DrawerTitle>Are you absolutely sure?</DrawerTitle>
