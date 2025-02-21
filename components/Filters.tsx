@@ -8,6 +8,8 @@ import {
 import { Checkbox } from "./ui/checkbox";
 import { Label } from "@radix-ui/react-label";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import Link from "next/link";
+import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 
 const SubCategories = {
   categories: [
@@ -67,6 +69,24 @@ const SubCategories = {
       label: "L",
     },
   ],
+  prices: [
+    {
+      value: "",
+      label: "Any Price",
+    },
+    {
+      value: "0-20",
+      label: "0$ - 20$",
+    },
+    {
+      value: "0-50",
+      label: "0$ - 50$",
+    },
+    {
+      value: "50-100",
+      label: "0$ - 100$",
+    },
+  ],
 };
 
 export default function Filters() {
@@ -115,11 +135,26 @@ export default function Filters() {
     replace(`${pathname}?${params.toString()}`);
   }
 
+  function handlePriceChange(term: string) {
+    const params = new URLSearchParams(searchParams);
+
+    if (term) {
+      params.set("price", term);
+    } else {
+      params.delete("price");
+    }
+
+    replace(`${pathname}?${params.toString()}`);
+  }
+
   const checkedColors = searchParams.get("color")?.split(",") || [];
   const checkedSizes = searchParams.get("size")?.split(",") || [];
+  const checkedPrices = searchParams.get("price") || "";
+
+  const hasFilters = searchParams.toString().length > 0;
 
   return (
-    <div className="hidden lg:block">
+    <div className="hidden lg:block w-64 p-2 ">
       {/* Categories */}
       <ul className="space-y-4 border-b border-gray-200 pb-6">
         {SubCategories.categories.map((category) => (
@@ -134,7 +169,7 @@ export default function Filters() {
         ))}
       </ul>
       <Accordion type="multiple" className="w-full">
-        <AccordionItem value="item-1">
+        <AccordionItem value="colors">
           <AccordionTrigger>Colors</AccordionTrigger>
           {SubCategories.colors.map((color) => (
             <AccordionContent
@@ -150,14 +185,14 @@ export default function Filters() {
               />
               <Label
                 htmlFor={color.value}
-                className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                className="font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
                 {color.label}
               </Label>
             </AccordionContent>
           ))}
         </AccordionItem>
-        <AccordionItem value="item-2">
+        <AccordionItem value="sizes">
           <AccordionTrigger>Sizes</AccordionTrigger>
           {SubCategories.sizes.map((size) => (
             <AccordionContent
@@ -173,14 +208,42 @@ export default function Filters() {
               />
               <Label
                 htmlFor={size.value}
-                className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                className="font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
                 {size.label}
               </Label>
             </AccordionContent>
           ))}
         </AccordionItem>
+        <AccordionItem value="prices">
+          <AccordionTrigger>Prices</AccordionTrigger>
+          <AccordionContent>
+            <RadioGroup>
+              {SubCategories.prices.map((price) => (
+                <div className="flex items-center space-x-2" key={price.value}>
+                  <RadioGroupItem
+                    value={price.value}
+                    id={price.value}
+                    checked={checkedPrices === price.value}
+                    onClick={() => handlePriceChange(price.value)}
+                  />
+                  <Label className="font-medium" htmlFor={price.value}>
+                    {price.label}
+                  </Label>
+                </div>
+              ))}
+              <div className="flex justify-between mt-1"></div>
+            </RadioGroup>
+          </AccordionContent>
+        </AccordionItem>
       </Accordion>
+      {hasFilters && (
+        <div className="mt-6">
+          <Link href="/" className="text-red-600 hover:underline">
+            Remove All Filters
+          </Link>
+        </div>
+      )}
     </div>
   );
 }

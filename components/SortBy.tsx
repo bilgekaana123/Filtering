@@ -44,19 +44,22 @@ export default function SortBy() {
   }
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="flex items-center">
-        Sort By
+      <DropdownMenuTrigger className="hidden lg:flex items-center">
+        Sort
         <ChevronDown />
       </DropdownMenuTrigger>
-      <DropdownMenuContent>
-        <DropdownMenuItem className="flex flex-col items-center">
-          {SortOptions.map((options) => (
+      <DropdownMenuContent align="end">
+        {SortOptions.map((options) => (
+          <DropdownMenuItem
+            key={options.value}
+            className="flex flex-col items-center"
+          >
             <Button
               className={cn(
                 "flex items-center justify-start w-full  p-2 lg:p-4 text-sm",
                 {
                   "text-black": options.value === filter,
-                  "text-gray-400": options.value !== filter,
+                  "text-gray-500": options.value !== filter,
                 },
               )}
               variant="ghost"
@@ -65,8 +68,8 @@ export default function SortBy() {
             >
               {options.name}
             </Button>
-          ))}
-        </DropdownMenuItem>
+          </DropdownMenuItem>
+        ))}
       </DropdownMenuContent>
     </DropdownMenu>
   );

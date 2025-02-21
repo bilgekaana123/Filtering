@@ -3,6 +3,7 @@ import React from "react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { SearchIcon } from "lucide-react";
+import { useDebouncedCallback } from "use-debounce";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
 
 export default function Search() {
@@ -10,7 +11,7 @@ export default function Search() {
   const searchParams = useSearchParams();
   const { replace } = useRouter();
 
-  function handleSearch(term: string) {
+  const handleSearch = useDebouncedCallback((term: string) => {
     const params = new URLSearchParams(searchParams);
 
     if (term) {
@@ -19,7 +20,7 @@ export default function Search() {
       params.delete("query");
     }
     replace(`${pathname}?${params.toString()}`);
-  }
+  }, 200);
 
   return (
     <div>

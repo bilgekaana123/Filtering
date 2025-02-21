@@ -2,31 +2,47 @@
 
 import { db } from "@/db/drizzle";
 import { products } from "@/db/schema";
-import { ilike, asc, desc, inArray, and, SQL } from "drizzle-orm";
+import { ilike, asc, desc, inArray, and, SQL, gt, lte } from "drizzle-orm";
 
 export async function getAllProducts(
   query?: string,
   sortBy?: string,
   color?: string,
   size?: string,
+  price?: string,
 ) {
   const conditions: SQL[] = [];
 
-  // Add name search condition
+  // Name search
   if (query) {
     conditions.push(ilike(products.name, `%${query}%`));
   }
 
-  // Add color filter condition
+  // Color filter
   if (color) {
     const colorArray = color.split(",");
     conditions.push(inArray(products.color, colorArray));
   }
 
-  // Add size filter condition
+  // Size filter
   if (size) {
     const sizeArray = size.split(",");
     conditions.push(inArray(products.size, sizeArray));
+  }
+
+  // Price filter
+  if (price) {
+    let priceCondition: SQL | undefined;
+    if (price === "0-20") {
+      priceCondition = and(gt(products.price, 0), lte(products.price, 20));
+    } else if (price === "0-50") {
+      priceCondition = and(gt(products.price, 0), lte(products.price, 50));
+    } else if (price === "0-100") {
+      priceCondition = and(gt(products.price, 0), lte(products.price, 100));
+    }
+    if (priceCondition) {
+      conditions.push(priceCondition);
+    }
   }
 
   const baseQuery = db.select().from(products);
