@@ -1,10 +1,4 @@
 "use client";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 import { Checkbox } from "./ui/checkbox";
 import { Label } from "@radix-ui/react-label";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
