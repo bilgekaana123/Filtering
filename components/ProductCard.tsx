@@ -33,7 +33,7 @@ export default async function ProductCard({ product }: ProductCardProps) {
             Size {product.size.toUpperCase()}, {product.color}
           </p>
         </div>
-        <p className="text-sm font-medium">{product.price}</p>
+        <p className="text-md font-medium mr-2">{product.price}$</p>
       </div>
     </div>
   );

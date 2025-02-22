@@ -44,9 +44,9 @@ export default function SortBy() {
   }
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="hidden lg:flex">
+      <DropdownMenuTrigger className="hidden sm:flex sm:ml-4">
         {
-          <div className="ml-2">
+          <div className="ml-2 cursor-pointer">
             {filter === "price-desc" ? (
               <label>Price: High to Low</label>
             ) : filter === "price-asc" ? (

@@ -28,7 +28,7 @@ export default async function Home(props: {
   const products = await getAllProducts(query, sortByQ, colorQ, sizeQ, priceQ);
 
   return (
-    <div className="mx-auto p-8 max-w-7xl xl:max-w-[120rem]">
+    <div className="mx-auto py-8 px-16 max-w-7xl xl:max-w-[120rem]">
       <div className="flex flex-row items-center justify-between rounded-md p-2">
         <Link
           href="/"
@@ -37,8 +37,10 @@ export default async function Home(props: {
           HOME
         </Link>
         <Search />
-        <SortBy />
-        <MobileFilters />
+        <div className="flex items-center">
+          <MobileFilters />
+          <SortBy />
+        </div>
       </div>
       <div className="flex gap-8 mt-12 ">
         {/* Filters */}
